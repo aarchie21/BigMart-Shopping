@@ -8,6 +8,99 @@
     <title>Grocery Store | Fruits</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <style>
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .cart:hover {
+            background-color: #555;
+        }
+
+        .cart-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 250px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            display: none;
+            z-index: 1;
+        }
+
+        .cart-container.active {
+            display: block;
+        }
+
+        .cart-item {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .cart-item .item-details {
+            flex: 1;
+        }
+
+        .cart-item .item-details h4 {
+            margin: 0;
+        }
+
+        .cart-item .item-details p {
+            margin: 0;
+            color: #777;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+
+        .remove-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .remove-btn:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,11 +114,21 @@
                 <li class="item"><a href="#Items">Our Services</a></li>
                 <!-- <li class="item"><a href="#">Our Delivery Partners</a></li> -->
                 <li class="item"><a href="about.html">About Us</a></li>
-                <li class="item"><a href="#">Contact Us</a></li>
+                <li></li>
+                <li></li>
             </ul>
         </div>
     </nav>
 
+
+    <button class="cart" onclick="toggleCart()">
+        <i class="fa fa-shopping-cart"></i> <span id="cart-count">0</span>
+    </button>
+    <div class="cart-container" id="cart-container">
+        <h3>Shopping Cart</h3>
+        <div id="cart-items"></div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
 
     <section class="cardContainer">
         <div class="contain">
@@ -35,7 +138,7 @@
                     <div class="det">
                         <h1>Apple</h1>
                         <p>Rs.10/piece</p>
-                        <button class="btn" id="appleBtn">Buy Now</button>
+                        <button class="btn" id="appleBtn" onclick="addToCart('Apple', 1, 10)">Buy Now</button>
                     </div>
 
                 </div>
@@ -44,7 +147,7 @@
                     <div class="det">
                         <h1>Apple Green</h1>
                         <p>Rs.15/piece</p>
-                        <button class="btn" id="gappleBtn">Buy Now</button>
+                        <button class="btn" id="gappleBtn" onclick="addToCart('Apple Green', 2, 15)">Buy Now</button>
                     </div>
 
                 </div>
@@ -53,7 +156,7 @@
                     <div class="det">
                         <h1>Oranges</h1>
                         <p>Rs.10/piece</p>
-                        <button class="btn" id="orangeBtn">Buy Now</button>
+                        <button class="btn" id="orangeBtn" onclick="addToCart('Oranges', 3, 10)">Buy Now</button>
                     </div>
 
                 </div>
@@ -62,7 +165,7 @@
                     <div class="det">
                         <h1>Mangoes</h1>
                         <p>Rs.7.5/piece</p>
-                        <button class="btn" id="mangoBtn">Buy Now</button>
+                        <button class="btn" id="mangoBtn" onclick="addToCart('Mangoes', 4, 7.5)">Buy Now</button>
                     </div>
 
                 </div>
@@ -71,7 +174,7 @@
                     <div class="det">
                         <h1>Papaya</h1>
                         <p>Rs.5/piece</p>
-                        <button class="btn" id="papayaBtn">Buy Now</button>
+                        <button class="btn" id="papayaBtn" onclick="addToCart('Papaya', 5, 5)">Buy Now</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +184,7 @@
                     <div class="det">
                         <h1>Melon</h1>
                         <p>Rs.15/piece</p>
-                        <button class="btn" id="melonBtn">Buy Now</button>
+                        <button class="btn" id="melonBtn" onclick="addToCart('Melon', 6, 15)">Buy Now</button>
                     </div>
 
                 </div>
@@ -90,7 +193,7 @@
                     <div class="det">
                         <h1>Kiwi</h1>
                         <p>Rs.50/piece</p>
-                        <button class="btn" id="kiwiBtn">Buy Now</button>
+                        <button class="btn" id="kiwiBtn" onclick="addToCart('Kiwi', 7, 50)">Buy Now</button>
                     </div>
 
                 </div>
@@ -99,7 +202,7 @@
                     <div class="det">
                         <h1>Banana</h1>
                         <p>Rs.50/dozen</p>
-                        <button class="btn" id="bananaBtn">Buy Now</button>
+                        <button class="btn" id="bananaBtn" onclick="addToCart('Banana', 8, 50)">Buy Now</button>
                     </div>
 
                 </div>
@@ -108,7 +211,7 @@
                     <div class="det">
                         <h1>Grapes</h1>
                         <p>Rs.80/kg</p>
-                        <button class="btn" id="grapesBtn">Buy Now</button>
+                        <button class="btn" id="grapesBtn" onclick="addToCart('Grapes', 9, 80)">Buy Now</button>
                     </div>
 
                 </div>
@@ -117,7 +220,7 @@
                     <div class="det">
                         <h1>Pineapple</h1>
                         <p>Rs.53/piece</p>
-                        <button class="btn" id="pineappleBtn">Buy Now</button>
+                        <button class="btn" id="pineappleBtn" onclick="addToCart('Pineapple', 10, 53)">Buy Now</button>
                     </div>
                 </div>
             </div>
@@ -126,4 +229,95 @@
     <section id="billing">
         
     </section>
+
+    <script>
+        let cartItems = [];
+        let cartCount = 0;
+
+        function toggleCart() {
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.classList.toggle('active');
+        }
+
+        function addToCart(itemName, itemId, itemPrice) {
+            const existingItem = cartItems.find(item => item.id === itemId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cartItems.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: 1
+                });
+            }
+            updateCart();
+        }
+
+        function removeFromCart(itemId) {
+            const itemIndex = cartItems.findIndex(item => item.id === itemId);
+            if (itemIndex !== -1) {
+                if (cartItems[itemIndex].quantity > 1) {
+                    cartItems[itemIndex].quantity--;
+                } else {
+                    cartItems.splice(itemIndex, 1);
+                }
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsElement = document.getElementById('cart-items');
+            cartItemsElement.innerHTML = '';
+            cartCount = 0;
+            cartItems.forEach(item => {
+                const cartItemElement = document.createElement('div');
+                cartItemElement.classList.add('cart-item');
+                cartItemElement.innerHTML = `
+                    <img src="${getImageUrl(item.name)}" alt="${item.name}">
+                    <div class="item-details">
+                        <h4>${item.name}</h4>
+                        <p>Price: Rs.${item.price} - Quantity: ${item.quantity}</p>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItemsElement.appendChild(cartItemElement);
+                cartCount += item.quantity;
+            });
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        function checkout() {
+            alert('Checkout functionality will be implemented in the future!');
+        }
+
+        function getImageUrl(name) {
+            switch (name) {
+                case 'Apple':
+                    return 'apple.png';
+                case 'Apple Green':
+                    return 'green apple.png';
+                case 'Oranges':
+                    return 'oranges.png';
+                case 'Mangoes':
+                    return 'mangoes.png';
+                case 'Papaya':
+                    return 'papaya.png';
+                case 'Melon':
+                    return 'melons.png';
+                case 'Kiwi':
+                    return 'kiwi.png';
+                case 'Banana':
+                    return 'banana.png';
+                case 'Grapes':
+                    return 'grapes.png';
+                case 'Pineapple':
+                    return 'pineappple.png';
+                default:
+                    return '';
+            }
+        }
+    </script>
 </body>
+
+</html>
