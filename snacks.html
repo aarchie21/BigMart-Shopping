@@ -5,9 +5,102 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery Store | Home</title>
+    <title>Grocery Store | Snacks</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <style>
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .cart:hover {
+            background-color: #555;
+        }
+
+        .cart-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 250px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            display: none;
+            z-index: 1;
+        }
+
+        .cart-container.active {
+            display: block;
+        }
+
+        .cart-item {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .cart-item .item-details {
+            flex: 1;
+        }
+
+        .cart-item .item-details h4 {
+            margin: 0;
+        }
+
+        .cart-item .item-details p {
+            margin: 0;
+            color: #777;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background-color: #45a049;
+        }
+
+        .remove-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .remove-btn:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,11 +114,21 @@
                 <li class="item"><a href="index.html">Our Services</a></li>
                 <!-- <li class="item"><a href="#">Our Delivery Partners</a></li> -->
                 <li class="item"><a href="#aboutUs">About Us</a></li>
-                <li class="item"><a href="#">Contact Us</a></li>
+                <li></li>
+                <li></li>
             </ul>
         </div>
     </nav>
 
+
+    <button class="cart" onclick="toggleCart()">
+        <i class="fa fa-shopping-cart"></i> <span id="cart-count">0</span>
+    </button>
+    <div class="cart-container" id="cart-container">
+        <h3>Shopping Cart</h3>
+        <div id="cart-items"></div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
 
     <section class="cardContainer">
         <div class="contain">
@@ -35,7 +138,7 @@
                     <div class="det">
                         <h1>Oreo Biscuit</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="oreobtn">Buy Now</button>
+                        <button class="btn" id="oreobtn" onclick="addToCart('Oreo Biscuit', 1, 30)">Buy Now</button>
                     </div>
 
                 </div>
@@ -44,7 +147,7 @@
                     <div class="det">
                         <h1>Aloo Bhujia</h1>
                         <p>Rs.40</p>
-                        <button class="btn" id="aloobhujiabtn">Buy Now</button>
+                        <button class="btn" id="aloobhujiabtn" onclick="addToCart('Aloo Bhujia', 2, 40)">Buy Now</button>
                     </div>
 
                 </div>
@@ -53,7 +156,7 @@
                     <div class="det">
                         <h1>Lemon Bhel</h1>
                         <p>Rs.40</p>
-                        <button class="btn" id="lemonbtn">Buy Now</button>
+                        <button class="btn" id="lemonbtn" onclick="addToCart('Lemon Bhel', 3, 40)">Buy Now</button>
                     </div>
 
                 </div>
@@ -62,7 +165,7 @@
                     <div class="det">
                         <h1>ParleG biscuit</h1>
                         <p>Rs.10</p>
-                        <buton class="btn" id="parlegbtn">Buy Now</button>
+                        <button class="btn" id="parlegbtn" onclick="addToCart('ParleG biscuit', 4, 10)">Buy Now</button>
                     </div>
 
                 </div>
@@ -71,7 +174,7 @@
                     <div class="det">
                         <h1>Tiger biscuit</h1>
                         <p>Rs.10</p>
-                        <button class="btn" id="tigerbtn">Buy Now</button>
+                        <button class="btn" id="tigerbtn" onclick="addToCart('Tiger biscuit', 5, 10)">Buy Now</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +184,7 @@
                     <div class="det">
                         <h1>GoodDay (Blue)</h1>
                         <p>Rs.15</p>
-                        <button class="btn" id="gdbbtn">Buy Now</button>
+                        <button class="btn" id="gdbbtn" onclick="addToCart('GoodDay (Blue)', 6, 15)">Buy Now</button>
                     </div>
 
                 </div>
@@ -90,7 +193,7 @@
                     <div class="det">
                         <h1>GoodDay (Green)</h1>
                         <p>Rs.15</p>
-                        <button class="btn" id="gdgbtn">Buy Now</button>
+                        <button class="btn" id="gdgbtn" onclick="addToCart('GoodDay (Green)', 7, 15)">Buy Now</button>
                     </div>
 
                 </div>
@@ -99,7 +202,7 @@
                     <div class="det">
                         <h1>GoodDay (Orange)</h1>
                         <p>Rs.15</p>
-                        <button class="btn" id="gdobtn">Buy Now</button>
+                        <button class="btn" id="gdobtn" onclick="addToCart('GoodDay (Orange)', 8, 15)">Buy Now</button>
                     </div>
 
                 </div>
@@ -108,7 +211,7 @@
                     <div class="det">
                         <h1>Lays (Blue)</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="laysbbtn">Buy Now</button>
+                        <button class="btn" id="laysbbtn" onclick="addToCart('Lays (Blue)', 9, 30)">Buy Now</button>
                     </div>
 
                 </div>
@@ -117,7 +220,7 @@
                     <div class="det">
                         <h1>Lays (Green)</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="laysgbtn">Buy Now</button>
+                        <button class="btn" id="laysgbtn" onclick="addToCart('Lays (Green)', 10, 30)">Buy Now</button>
                     </div>
                 </div>
             </div>
@@ -127,7 +230,7 @@
                     <div class="det">
                         <h1>Lays (Red)</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="laysrbtn">Buy Now</button>
+                        <button class="btn" id="laysrbtn" onclick="addToCart('Lays (Red)', 11, 30)">Buy Now</button>
                     </div>
 
                 </div>
@@ -136,7 +239,7 @@
                     <div class="det">
                         <h1>Plain Bhujia</h1>
                         <p>Rs.40</p>
-                        <button class="btn" id="plainbtn">Buy Now</button>
+                        <button class="btn" id="plainbtn" onclick="addToCart('Plain Bhujia', 12, 40)">Buy Now</button>
                     </div>
 
                 </div>
@@ -145,7 +248,7 @@
                     <div class="det">
                         <h1>Lays (Yellow)</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="laysybtn">Buy Now</button>
+                        <button class="btn" id="laysybtn" onclick="addToCart('Lays (Yellow)', 13, 30)">Buy Now</button>
                     </div>
 
                 </div>
@@ -154,7 +257,7 @@
                     <div class="det">
                         <h1>Kurkure Chili</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="kurkuregbtn">Buy Now</button>
+                        <button class="btn" id="kurkuregbtn" onclick="addToCart('Kurkure Chili', 14, 30)">Buy Now</button>
                     </div>
 
                 </div>
@@ -163,7 +266,7 @@
                     <div class="det">
                         <h1>Kurkure masala</h1>
                         <p>Rs.30</p>
-                        <button class="btn" id="kurkureobtn">Buy Now</button>
+                        <button class="btn" id="kurkureobtn" onclick="addToCart('Kurkure masala', 15, 30)">Buy Now</button>
                     </div>
                 </div>
             </div>
@@ -172,4 +275,105 @@
     <section id="billing">
         
     </section>
+
+    <script>
+        let cartItems = [];
+        let cartCount = 0;
+
+        function toggleCart() {
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.classList.toggle('active');
+        }
+
+        function addToCart(itemName, itemId, itemPrice) {
+            const existingItem = cartItems.find(item => item.id === itemId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cartItems.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: 1
+                });
+            }
+            updateCart();
+        }
+
+        function removeFromCart(itemId) {
+            const itemIndex = cartItems.findIndex(item => item.id === itemId);
+            if (itemIndex !== -1) {
+                if (cartItems[itemIndex].quantity > 1) {
+                    cartItems[itemIndex].quantity--;
+                } else {
+                    cartItems.splice(itemIndex, 1);
+                }
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItemsElement = document.getElementById('cart-items');
+            cartItemsElement.innerHTML = '';
+            cartCount = 0;
+            cartItems.forEach(item => {
+                const cartItemElement = document.createElement('div');
+                cartItemElement.classList.add('cart-item');
+                cartItemElement.innerHTML = `
+                    <img src="${getImageUrl(item.name)}" alt="${item.name}">
+                    <div class="item-details">
+                        <h4>${item.name}</h4>
+                        <p>Price: Rs.${item.price} - Quantity: ${item.quantity}</p>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItemsElement.appendChild(cartItemElement);
+                cartCount += item.quantity;
+            });
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        function checkout() {
+            alert('Checkout functionality will be implemented in the future!');
+        }
+
+        function getImageUrl(name) {
+            switch (name) {
+                case 'Oreo Biscuit':
+                    return 'oreo.png';
+                case 'Aloo Bhujia':
+                    return 'aloo bhujia.png';
+                case 'Lemon Bhel':
+                    return 'Lemon bhel.png';
+                case 'ParleG biscuit':
+                    return 'parleG.png';
+                case 'Tiger biscuit':
+                    return 'tiger biscuit.png';
+                case 'GoodDay (Blue)':
+                    return 'GD blue.png';
+                case 'GoodDay (Green)':
+                    return 'GD green.png';
+                case 'GoodDay (Orange)':
+                    return 'GD orange.png';
+                case 'Lays (Blue)':
+                    return 'layd blue.png';
+                case 'Lays (Green)':
+                    return 'lays green.png';
+                case 'Lays (Red)':
+                    return 'lays ref.png';
+                case 'Plain Bhujia':
+                    return 'Plain bhujia.png';
+                case 'Lays (Yellow)':
+                    return 'lays yellow.png';
+                case 'Kurkure Chili':
+                    return 'kurkure green.png';
+                case 'Kurkure masala':
+                    return 'kurkure orange.png';
+                default:
+                    return '';
+            }
+        }
+    </script>
 </body>
+
+</html>
